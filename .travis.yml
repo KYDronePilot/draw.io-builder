@@ -1,0 +1,17 @@
+env:
+  global:
+  # Docker Repository
+  - REPO=kydronepilot19/draw.io-builder
+  # Compute docker tag
+  - TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  # Retreive commit ID
+  - COMMIT=${TRAVIS_COMMIT::8}
+services:
+  - docker
+before_install:
+  - docker build -t $REPO:$COMMIT .
+after_success:
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO
