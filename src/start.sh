@@ -9,4 +9,4 @@ export DISPLAY=:1.0
 cd /diagrams
 
 # Run user command
-drawio --no-sandbox $1
+$1
